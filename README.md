@@ -21,6 +21,6 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 # License
 This project is licensed under [MIT license](LICENSE).
 
-The data is queried from ReST endpoints of the fabulous [transport.rest](transport.rest) project. :clap:
+The data is queried from ReST endpoints of the fabulous [transport.rest](https://transport.rest) project. :clap:
 
 Icons were kindly made by Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [flaticon.com](https://www.flaticon.com).
