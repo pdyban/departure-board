@@ -52,13 +52,14 @@ export default {
       }
     },
     retrieveDepartures: function() {
-      if(TEST) {
-      axios
-        .get('https://v5.bvg.transport.rest/stops/900120008/departures?results=15')
-        .then(response => {this.items = parseResponse(response); this.lastUpdate=Date.now()})
-      }
+      if(!TEST) {
+        console.log('Requesting data from server...');
+        axios
+          .get('https://v5.bvg.transport.rest/stops/900120008/departures?results=15')
+          .then(response => {this.items = parseResponse(response); this.lastUpdate=Date.now()})
+        }
       else {
-        console.log('TEST');
+        console.log('Running in test mode');
         this.items = [
           {'line': 'M10', 'type': 'tram', 'departureTime': '2021-01-02T00:32:00+01:00', 'direction': 'S+U Hauptbahnhof'},
           {'line': 'U5', 'type': 'subway', 'departureTime': '2021-01-02T00:35:00+01:00', 'direction': 'Hönow'}
