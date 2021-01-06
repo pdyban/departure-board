@@ -1,12 +1,13 @@
 var path = require('path')
 var webpack = require('webpack')
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
     filename: 'build.js'
   },
   module: {
@@ -36,7 +37,7 @@ module.exports = {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'file-loader',
         options: {
-          name: '[name].[ext]?[hash]'
+          name: '[name].[ext]'
         }
       }
     ]
@@ -53,11 +54,19 @@ module.exports = {
   performance: {
     hints: false
   },
-  plugins: [new ExtractTextPlugin("main.css")],
+  plugins: [
+    new ExtractTextPlugin("main.css"),
+    new HtmlWebpackPlugin({
+      title: 'Departure Board',
+      template: 'src/index.html'
+    }),
+    new CleanWebpackPlugin()
+  ],
   devtool: '#eval-source-map'
 }
 
 if (process.env.NODE_ENV === 'production') {
+  console.log('Production build');
   module.exports.devtool = '#source-map'
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([

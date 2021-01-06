@@ -25,7 +25,7 @@
 <script>
 import axios from 'axios';
 
-var TEST = webpackHotUpdate != null;
+var TEST = false;
 
 export default {
   data() {
