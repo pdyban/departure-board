@@ -1,18 +1,18 @@
 <template>
   <div id="app">
     <Navbar />
-    <Listview />
+    <Settings />
   </div>
 </template>
 
 <script>
-  import Navbar from './components/Navbar.vue';
-  import Listview from './components/Listview.vue';
+  import Navbar from '../components/Navbar.vue';
+  import Settings from '../components/Settings.vue';
   export default {
     name: 'navbar',
     components: {
         Navbar,
-        Listview
+        Settings
       }
     }
 </script>

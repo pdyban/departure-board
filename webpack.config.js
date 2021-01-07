@@ -5,10 +5,13 @@ const HtmlWebpackPlugin = require("html-webpack-plugin")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-  entry: './src/main.js',
+  entry: {
+    index: './src/index/main.js',
+    settings: './src/settings/main.js'
+  },
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: 'build.js'
+    filename: '[name].build.js'
   },
   module: {
     rules: [
@@ -58,7 +61,15 @@ module.exports = {
     new ExtractTextPlugin("main.css"),
     new HtmlWebpackPlugin({
       title: 'Departure Board',
-      template: 'src/index.html'
+      filename: 'index.html',
+      template: 'src/template.html',
+      chunks: ['index']
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Settings',
+      filename: 'settings.html',
+      template: 'src/template.html',
+      chunks: ['settings']
     }),
     new CleanWebpackPlugin()
   ],

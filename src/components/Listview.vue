@@ -1,7 +1,7 @@
 <template>
   <b-list-group>
     <b-list-group-item variant="warning" v-if="expired">
-      Server is down.
+      {{serverStatusMessage}}
     </b-list-group-item>
     <b-list-group-item v-for="item in items" :key="item.id" :disabled="expired" >
       <b-container>
@@ -39,9 +39,6 @@ export default {
       }
   },
   mounted() {
-    if(localStorage.stationID) {
-      this.stationID = localStorage.stationID;
-    }
   },
   watch: {
     stationID(newStationID) {
@@ -106,6 +103,10 @@ export default {
     }
   },
   created: function() {
+    if(localStorage.stationID) {
+      this.stationID = localStorage.stationID;
+    }
+
     var self = this;
     this.retrieveDepartures();
     setInterval(this.retrieveDepartures, 30000);
@@ -116,6 +117,7 @@ export default {
 }
 function parseResponse(response) {
   if(response.status != 200) {
+    this.serverStatusMessage = 'Server is unreachable';
     return [];
   }
   var res = [];
