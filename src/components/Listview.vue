@@ -8,13 +8,13 @@
         <b-row>
         </b-row>
         <b-row>
-          <b-col cols="auto" md="1">
+          <b-col cols="2" md="1">
             <b-badge variant="primary" v-bind:class="badgeType(item)" pill>{{ item.line }}</b-badge>
           </b-col>
-          <b-col cols=6 md="2" auto class="text-left">
+          <b-col cols="3" md="2" auto class="text-left">
             {{ when(item) }}
           </b-col>
-          <b-col cols="12" md="9" class="text-left">
+          <b-col cols="7" md="9" class="text-left">
             {{ item.direction }}
           </b-col>
         </b-row>
@@ -41,10 +41,10 @@ export default {
     },
     when: function(item) {
       var timeLeft = (Date.parse(item.departureTime) - Date.now())/1000/60;
-      if(timeLeft < -2) {
-        return "gone";
+      if(timeLeft < 0) {
+        return "departing";
       }
-      else if(timeLeft < 0) {
+      else if(timeLeft < 1) {
         return "now";
       }
       else {
