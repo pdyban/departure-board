@@ -32,7 +32,9 @@ export default {
       return {
         items: [],
         lastUpdate: null,
-        now: Date.now()
+        now: Date.now(),
+        serverStatusCode: 200,
+        serverStatusMessage: 'Server is reachable'
       }
   },
   methods: {
@@ -56,7 +58,17 @@ export default {
         console.log('Requesting data from server...');
         axios
           .get('https://v5.bvg.transport.rest/stops/900120008/departures?results=15')
-          .then(response => {this.items = parseResponse(response); this.lastUpdate=Date.now()})
+          .then(response => {
+            this.items = parseResponse(response);
+            this.lastUpdate = Date.now();
+            this.serverStatusCode = response.status;
+            this.serverStatusMessage = "";
+          })
+          .catch(function(error) {
+            console.log(error);
+            this.serverStatusCode = 500;
+            this.serverStatusMessage = error;
+          })
         }
       else {
         console.log('Running in test mode');
@@ -65,6 +77,8 @@ export default {
           {'line': 'U5', 'type': 'subway', 'departureTime': '2021-01-02T00:35:00+01:00', 'direction': 'Hönow'}
           ];
         this.lastUpdate = Date.now();
+        this.serverStatusCode = 200;
+        this.serverStatusMessage = "Using test data";
       }
     }
   },
