@@ -34,8 +34,20 @@ export default {
         lastUpdate: null,
         now: Date.now(),
         serverStatusCode: 200,
-        serverStatusMessage: 'Server is reachable'
+        serverStatusMessage: 'Server is reachable',
+        stationID: null
       }
+  },
+  mounted() {
+    if(localStorage.stationID) {
+      this.stationID = localStorage.stationID;
+    }
+  },
+  watch: {
+    stationID(newStationID) {
+      localStorage.stationID = newStationID;
+      this.retrieveDepartures();
+    }
   },
   methods: {
     badgeType: function(item) {
@@ -55,19 +67,24 @@ export default {
     },
     retrieveDepartures: function() {
       if(!TEST) {
+        if(this.stationID == null) {
+          console.log('Select a station first!');
+          return;
+        }
         console.log('Requesting data from server...');
         axios
-          .get('https://v5.bvg.transport.rest/stops/900120008/departures?results=15')
+          .get('https://v5.bvg.transport.rest/stops/' + this.stationID + '/departures?results=15')
           .then(response => {
             this.items = parseResponse(response);
             this.lastUpdate = Date.now();
             this.serverStatusCode = response.status;
             this.serverStatusMessage = "";
           })
-          .catch(function(error) {
+          .catch(error => {
+            var self = this;
             console.log(error);
-            this.serverStatusCode = 500;
-            this.serverStatusMessage = error;
+            self.serverStatusCode = 500;
+            self.serverStatusMessage = error;
           })
         }
       else {
