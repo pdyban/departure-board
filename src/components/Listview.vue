@@ -42,6 +42,7 @@ export default {
   },
   watch: {
     stationID(newStationID) {
+      console.log('Station ID changed to ' + newStationID);
       localStorage.stationID = newStationID;
       this.retrieveDepartures();
     }
@@ -104,11 +105,12 @@ export default {
   },
   created: function() {
     if(localStorage.stationID) {
+      console.log('Loading station ID from local memory')
       this.stationID = localStorage.stationID;
     }
 
     var self = this;
-    this.retrieveDepartures();
+    // this.retrieveDepartures();
     setInterval(this.retrieveDepartures, 30000);
     setInterval(function () {
        self.now = Date.now()

@@ -74,7 +74,7 @@ export default {
   created: function() {
     this.debouncedSearchStationByName = _.debounce(this.searchStationByName, 500);
 
-    if(localStorage.station) {
+    if(localStorage.stationID) {
       this.stationID = localStorage.stationID;
       this.stationName = localStorage.stationName;
       console.log('Found station in local storage: ' + this.stationName);

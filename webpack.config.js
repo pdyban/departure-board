@@ -2,7 +2,8 @@ var path = require('path')
 var webpack = require('webpack')
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -71,7 +72,9 @@ module.exports = {
       template: 'src/template.html',
       chunks: ['settings']
     }),
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
+    new LodashModuleReplacementPlugin(),
+    new webpack.optimize.ModuleConcatenationPlugin()
   ],
   devtool: '#eval-source-map'
 }
