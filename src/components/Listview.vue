@@ -12,7 +12,7 @@
             <b-badge variant="primary" v-bind:class="badgeType(item)" pill>{{ item.line }}</b-badge>
           </b-col>
           <b-col cols="3" md="2" auto class="text-left">
-            {{ when(item) }}
+            {{ item.timeToDeparture }}
           </b-col>
           <b-col cols="7" md="9" class="text-left">
             {{ item.direction }}
@@ -50,18 +50,6 @@ export default {
     badgeType: function(item) {
       return 'badge-' + item.type;
     },
-    when: function(item) {
-      var timeLeft = (Date.parse(item.departureTime) - Date.now())/1000/60;
-      if(timeLeft < 0) {
-        return "departing";
-      }
-      else if(timeLeft < 1) {
-        return "now";
-      }
-      else {
-        return Math.round(timeLeft, 0) + ' min';
-      }
-    },
     retrieveDepartures: function() {
       if(!TEST) {
         if(!this.stationID || this.stationID == null) {
@@ -72,7 +60,7 @@ export default {
         }
         console.log('Requesting data from server...');
         axios
-          .get('https://v5.bvg.transport.rest/stops/' + this.stationID + '/departures?results=15')
+          .get('https://v5.bvg.transport.rest/stops/' + this.stationID + '/departures?results=30')
           .then(response => {
             this.items = parseResponse(response);
             this.lastUpdate = Date.now();
@@ -115,20 +103,40 @@ export default {
     }, 1000);
   }
 }
+function formatTimeToDeparture(timeInMin) {
+  if(timeInMin < 0) {
+    return "departing";
+  }
+  else if(timeInMin < 1) {
+    return "now";
+  }
+  else {
+    return Math.round(timeInMin, 0) + ' min';
+  }
+}
+function timeToDeparture(departureTime) {
+  return (Date.parse(departureTime) - Date.now())/1000/60;
+}
 function parseResponse(response) {
   if(response.status != 200) {
     this.serverStatusMessage = 'Server is unreachable';
     return [];
   }
   var res = [];
+  var threshold = -1;
+  if(localStorage.threshold) { threshold = localStorage.threshold; }
   for (const item of response.data) {
-    var item_res = {
-      'direction': item.direction,
-      'line': item.line.name,
-      'type': item.line.product,
-      'departureTime': item.when
+    console.log(item.when + ": " + timeToDeparture(item.when));
+    if(timeToDeparture(item.when) > threshold) {
+      var item_res = {
+        'direction': item.direction,
+        'line': item.line.name,
+        'type': item.line.product,
+        'departureTime': item.when,
+        'timeToDeparture': formatTimeToDeparture(timeToDeparture(item.when))
+      }
+      res.push(item_res);
     }
-    res.push(item_res);
   }
   return res;
 }
