@@ -8,6 +8,9 @@
           <datalist id="suggestions">
             <option v-for="suggestion in suggestions">{{suggestion.label}}</option>
           </datalist>
+
+          <label for="type-threshold">Minimum time to departure:</label>
+          <b-form-input id="type-threshold" type="number" v-model="threshold" autocomplete="off"></b-form-input>
         </b-form>
       </b-container>
     </b-list-group-item>
@@ -23,7 +26,8 @@ export default {
           query: '',
           suggestions: [],
           stationID: null,
-          stationName: ''
+          stationName: '',
+          threshold: -1
         }
   },
   computed : {
@@ -65,6 +69,9 @@ export default {
         }
       }
       this.debouncedSearchStationByName();
+    },
+    threshold: function(value) {
+      localStorage.threshold = value;
     }
   },
   created: function() {
@@ -75,6 +82,10 @@ export default {
       this.stationName = localStorage.stationName;
       console.log('Found station in local storage: ' + this.stationName);
       this.query = this.stationName;
+    }
+
+    if(localStorage.threshold) {
+      this.threshold = localStorage.threshold;
     }
   },
   mounted: function() {
