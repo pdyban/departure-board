@@ -33,8 +33,7 @@ export default {
         items: [],
         lastUpdate: null,
         now: Date.now(),
-        serverStatusCode: 200,
-        serverStatusMessage: 'Server is reachable',
+        serverStatusMessage: 'Loading...',
         stationID: null
       }
   },
@@ -65,8 +64,10 @@ export default {
     },
     retrieveDepartures: function() {
       if(!TEST) {
-        if(this.stationID == null) {
-          console.log('Select a station first!');
+        if(!this.stationID || this.stationID == null) {
+          console.log('Select your station in settings');
+          this.serverStatusMessage = "Select your station in settings";
+          this.lastUpdate = null;
           return;
         }
         console.log('Requesting data from server...');
@@ -75,13 +76,11 @@ export default {
           .then(response => {
             this.items = parseResponse(response);
             this.lastUpdate = Date.now();
-            this.serverStatusCode = response.status;
             this.serverStatusMessage = "";
           })
           .catch(error => {
             var self = this;
             console.log(error);
-            self.serverStatusCode = 500;
             self.serverStatusMessage = error;
           })
         }
@@ -92,7 +91,6 @@ export default {
           {'line': 'U5', 'type': 'subway', 'departureTime': '2021-01-02T00:35:00+01:00', 'direction': 'Hönow'}
           ];
         this.lastUpdate = Date.now();
-        this.serverStatusCode = 200;
         this.serverStatusMessage = "Using test data";
       }
     }
@@ -110,7 +108,7 @@ export default {
     }
 
     var self = this;
-    // this.retrieveDepartures();
+    this.retrieveDepartures();
     setInterval(this.retrieveDepartures, 30000);
     setInterval(function () {
        self.now = Date.now()

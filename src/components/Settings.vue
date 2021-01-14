@@ -36,7 +36,6 @@ export default {
         }
       }
       return false;
-      // return this.stationID != null;
     }
   },
   methods: {
@@ -65,9 +64,6 @@ export default {
           return;
         }
       }
-      // this.suggestions = [];
-      // this.stationID = null;
-      // this.stationName = null;
       this.debouncedSearchStationByName();
     }
   },
