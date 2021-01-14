@@ -18,6 +18,7 @@
     "lodash-webpack-plugin": "^0.11.6",
     "path": "^0.12.7",
     "popper.js": "^1.12.9",
+    "terser-webpack-plugin": "^5.0.3",
     "vue": "^2.5.3",
     "vue-advanced-search": "^0.1.43"
   },
